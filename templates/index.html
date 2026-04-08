@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Listen</title>
+</head>
+<body>
+
+<h1>Todo Listen</h1>
+
+<h2>Neue Liste erstellen</h2>
+<form method="post" action="/todo-list">
+    <input type="text" name="name" placeholder="Name der Liste" required>
+    <button type="submit">Erstellen</button>
+</form>
+
+<hr>
+
+<h2>Alle Listen</h2>
+<ul>
+    {% for list in lists %}
+        <li>
+            <a href="/list/{{ list.id }}">{{ list.name }}</a>
+
+            <form method="post" action="/delete-list/{{ list.id }}" style="display:inline;">
+                <button type="submit">Löschen</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

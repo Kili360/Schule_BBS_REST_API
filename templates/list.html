@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ list.name }}</title>
+</head>
+<body>
+
+<h1>{{ list.name }}</h1>
+
+<a href="/">⬅ Zurück</a>
+
+<hr>
+
+<h2>Neuen Eintrag hinzufügen</h2>
+<form method="post" action="/todo-list/{{ list.id }}">
+    <input type="text" name="name" placeholder="Name" required><br><br>
+    <textarea name="description" placeholder="Beschreibung" required></textarea><br><br>
+    <button type="submit">Hinzufügen</button>
+</form>
+
+<hr>
+
+<h2>Einträge</h2>
+<ul>
+    {% for entry in entries %}
+        <li>
+            <strong>{{ entry.name }}</strong><br>
+            {{ entry.description }}
+
+            <form method="post" action="/delete-entry/{{ entry.id }}" style="display:inline;">
+                <button type="submit">Löschen</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
