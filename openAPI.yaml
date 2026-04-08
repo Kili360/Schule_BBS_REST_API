@@ -1,0 +1,179 @@
+openapi: 3.1.0
+info:
+  title: Todo API
+  version: 1.0.0
+  description: API zur Verwaltung von Todo-Listen und Einträgen
+
+paths:
+  /todo-list:
+    get:
+      summary: Alle Todo-Listen abrufen
+      responses:
+        '200':
+          description: Liste aller Todo-Listen
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoList'
+
+    post:
+      summary: Neue Todo-Liste erstellen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoList'
+      responses:
+        '201':
+          description: Erfolgreich erstellt
+        '400':
+          description: Ungültiger Body
+
+  /todo-list/{list_id}:
+    get:
+      summary: Alle Einträge einer Todo-Liste abrufen
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Liste aller Einträge
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoEntry'
+        '404':
+          description: Liste nicht gefunden
+
+    delete:
+      summary: Todo-Liste löschen
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Erfolgreich gelöscht
+        '404':
+          description: Liste nicht gefunden
+
+    post:
+      summary: Eintrag zu Todo-Liste hinzufügen
+      parameters:
+        - name: list_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoEntry'
+      responses:
+        '201':
+          description: Eintrag erstellt
+        '400':
+          description: Ungültiger Body
+        '404':
+          description: Liste nicht gefunden
+
+  /todo-list/entry/{entry_id}:
+    patch:
+      summary: Eintrag aktualisieren
+      parameters:
+        - name: entry_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoEntry'
+      responses:
+        '200':
+          description: Erfolgreich aktualisiert
+        '400':
+          description: Ungültiger Body
+        '404':
+          description: Eintrag nicht gefunden
+
+    delete:
+      summary: Eintrag löschen
+      parameters:
+        - name: entry_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Erfolgreich gelöscht
+        '404':
+          description: Eintrag nicht gefunden
+
+components:
+  schemas:
+    TodoList:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required: [id, name]
+
+    TodoEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        list_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+      required: [id, list_id, name, description]
+
+    CreateTodoList:
+      type: object
+      properties:
+        name:
+          type: string
+      required: [name]
+      additionalProperties: false
+
+    CreateTodoEntry:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required: [name, description]
+      additionalProperties: false
+
+    UpdateTodoEntry:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required: [name, description]
+      additionalProperties: false
