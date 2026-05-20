@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 1234
 
 # Befehl zum Starten der App
-CMD ["python", "app.py"]
+CMD ["python", "main.py"]
